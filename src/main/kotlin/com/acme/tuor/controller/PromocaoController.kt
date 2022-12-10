@@ -60,13 +60,13 @@ class PromocaoController {
     }
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody promocao: Promocao): ResponseEntity<Unit> {
+    fun update(@PathVariable id: Long, @RequestBody promocao: Promocao): ResponseEntity<Any> {
         var status = HttpStatus.NOT_FOUND
         if(this.promocaoService.getById(id) != null){
             this.promocaoService.update(id,promocao)
             status = HttpStatus.ACCEPTED
         }
-        return ResponseEntity(Unit,status)
+        return ResponseEntity(ErrorMessage("Promocao inexistente","Promoção ${id} não pode ser alterada, pois não foi possivel encontra-la"), status)
     }
     @GetMapping()
     fun getAll(@RequestParam(required = false, defaultValue = "0") start: Int,
