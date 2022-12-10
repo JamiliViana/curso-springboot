@@ -67,10 +67,13 @@ class PromocaoController {
     }
     @GetMapping()
     fun getAll(@RequestParam(required = false, defaultValue = "0") start: Int,
-               @RequestParam(required = false, defaultValue = "3") size: Int,): ResponseEntity<List<Promocao>>{
+               @RequestParam(required = false, defaultValue = "3") size: Int,): ResponseEntity<Any>{
         val list = this.promocaoService.getAll(start,size)
-        val status = if(list.size == 0)HttpStatus.NOT_FOUND else HttpStatus.OK
-        return ResponseEntity(list,status)
+        if(list.size == 0){
+            return ResponseEntity(ErrorMessage("Promoções não localizadas","Não possui promoções cadastradas"),
+                HttpStatus.NOT_FOUND)
+        } else
+            return ResponseEntity(list,HttpStatus.OK)
     }
     @GetMapping("/count")
     fun count(): ResponseEntity<Map<String,Long>> =
