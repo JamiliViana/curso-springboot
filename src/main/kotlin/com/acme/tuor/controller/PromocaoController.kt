@@ -18,8 +18,15 @@ class PromocaoController {
     @Autowired
     lateinit var promocaoService: PromocaoService
 
-    @GetMapping("/menorQue")
-    fun getAllMenores() = this.promocaoService.getAllByPrecoMenorQue()
+    @GetMapping("/menorQue/")
+    fun getAllMenores(@RequestParam(required = true) preco: Double): Any {
+        val list = this.promocaoService.getAllByPrecoMenorQue(preco);
+        if(list.size == 0){
+            return ResponseEntity(ErrorMessage("Promoções não localizadas","Promocões com o valor menor que ${preco}, não foram localizadas"),
+                HttpStatus.NOT_FOUND)
+        } else
+        return ResponseEntity(list,HttpStatus.OK)
+    }
 
     @GetMapping("/{id}")
     fun getId(@PathVariable id:Long): ResponseEntity<Any>{
@@ -27,7 +34,7 @@ class PromocaoController {
         return if(promocao != null)
             return ResponseEntity(promocao,HttpStatus.OK)
         else
-            return ResponseEntity(ErrorMessage("Promocao nao localizada","promocao ${id} nao localizada"),
+            return ResponseEntity(ErrorMessage("Promoção não localizada","Promocao ${id} não localizada"),
                 HttpStatus.NOT_FOUND)
         }
 
@@ -70,6 +77,17 @@ class PromocaoController {
         ResponseEntity.ok().body(mapOf("count" to this.promocaoService.count()))
 
     @GetMapping("/ordenados")
-    fun ordenados()= this.promocaoService.getAllSortedBylocal()
+    fun ordenados() = this.promocaoService.getAllSortedBylocal()
+
+    @GetMapping("/byLocal/")
+    fun getByLocal(@RequestParam(required = true) local:String): Any{
+        val list = this.promocaoService.searchByLocal(local);
+        if(list.size == 0){
+            return ResponseEntity(ErrorMessage("Promoções não localizadas","Promocões com o nome ${local}, não foram localizadas"),
+                HttpStatus.NOT_FOUND)
+        } else
+            return ResponseEntity(list,HttpStatus.OK)
+    }
+
 
 }

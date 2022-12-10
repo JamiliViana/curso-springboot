@@ -6,7 +6,7 @@
 ### **Get All Menores:**
 <br>
 
-Quando eu chamo: http://localhost:8080/promocoes/menorQue precisa colocar ao final, um número equivalente ao valor que será de referência para receber os número menores que esse valor.    
+Quando eu chamo: http://localhost:8080/promocoes/menorQue/Xn o logar do 'X' deverá ser um número equivalente ao valor que será de referência para receber os número menores que esse valor.    
 <br> **SE** existir valores menores registrados, deve retornar status 200, e um body:       
 ~~~~Kotlin 
 {

@@ -13,11 +13,11 @@ import org.springframework.transaction.annotation.Transactional
 @Repository
 interface PromocaoRepository: PagingAndSortingRepository<Promocao,Long> {
 
-    @Query(value = "select p from Promocao p where p.preco <= :preco and p.qtdDias >= :dias")
-    fun findByPrecoMenorQue(@Param(value = "preco") preco:Double, @Param(value = "dias") qtdDias:Int): List<Promocao>
+    @Query(value = "select p from Promocao p where p.preco <= :preco")
+    fun findByPrecoMenorQue(@Param(value = "preco") preco:Double): List<Promocao>
 
-    @Query(value = "select p from Promocao p where p.local IN :names ")
-    fun findByLocalInList(@Param(value = "names") names:List<String> ):List<Promocao>
+    @Query(value = "select p from Promocao p where p.local IN :local ")
+    fun findByLocalInList(@Param(value = "local") local:String): List<Promocao>
 
     @Query(value = "UPDATE Promocao p set p.preco = :valor WHERE p.local = :local")
     @Transactional @Modifying 
