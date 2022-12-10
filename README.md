@@ -163,7 +163,7 @@ Quando eu chamo GET: http://localhost:8080/promocoes/count irei receber a contag
 ~~~~Kotlin
 {
     "error": "Tabela Vazia"
-    "count": 0
+    "message": "Não possui nenhum dado na tabela"
 }
 ~~~~
 <br>
