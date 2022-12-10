@@ -47,13 +47,16 @@ class PromocaoController {
 
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id:Long): ResponseEntity<Unit>{
+    fun delete(@PathVariable id:Long): ResponseEntity<Any>{
         var status = HttpStatus.NOT_FOUND
         if(this.promocaoService.getById(id) != null){
             status = HttpStatus.ACCEPTED
             this.promocaoService.delete(id)
+            return ResponseEntity(Unit,status)
+        }else{
+            return ResponseEntity(ErrorMessage("Promocao inexistente","A promoção ${id} não existe"), status)
         }
-        return ResponseEntity(Unit,status)
+
     }
 
     @PutMapping("/{id}")
