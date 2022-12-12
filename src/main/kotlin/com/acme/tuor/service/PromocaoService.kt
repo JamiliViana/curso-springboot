@@ -8,7 +8,7 @@ interface PromocaoService {
     fun delete(id:Long)
     fun update(id:Long, promocao:Promocao)
     fun searchByLocal(local:String): List<Promocao>
-    fun getAll(start: Int, size : Int):List<Promocao>
+    fun getAll(start: Int, size: Int):List<Promocao>
     fun count(): Long
     fun getAllSortedBylocal():List<Promocao>
     fun getAllByPrecoMenorQue(preco:Double):List<Promocao>

@@ -1,6 +1,5 @@
 package com.acme.tuor.controller
 
-import com.acme.tuor.exception.PromocaoNotFoundException
 import com.acme.tuor.model.ErrorMessage
 import com.acme.tuor.model.Promocao;
 import com.acme.tuor.model.RespostaJSON
@@ -10,7 +9,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
-import java.util.concurrent.ConcurrentHashMap
 
 @RestController
 @RequestMapping (value = ["/promocoes"])

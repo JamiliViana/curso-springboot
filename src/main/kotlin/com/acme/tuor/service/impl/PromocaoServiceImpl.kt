@@ -19,15 +19,15 @@ class PromocaoServiceImpl(val promocaoRepository: PromocaoRepository): PromocaoS
     override fun getById(id: Long): Promocao? {
         return promocaoRepository.findById(id).orElse(null)
     }
-//    @CacheEvict("promocoes", allEntries = true)
+    //    @CacheEvict("promocoes", allEntries = true)
     override fun create(promocao: Promocao) {
         this.promocaoRepository.save(promocao)
     }
-//    @CacheEvict("promocoes", allEntries = true)
+    //    @CacheEvict("promocoes", allEntries = true)
     override fun delete(id: Long) {
         promocaoRepository.deleteById(id)
     }
-//    @CacheEvict("promocoes", allEntries = true)
+    //    @CacheEvict("promocoes", allEntries = true)
     override fun update(id: Long, promocao: Promocao) {
         create(promocao)
     }
@@ -36,7 +36,7 @@ class PromocaoServiceImpl(val promocaoRepository: PromocaoRepository): PromocaoS
         return this.promocaoRepository.findByLocalInList(local)
     };
 
-//    @org.springframework.cache.annotation.Cacheable("promocoes")
+    //    @org.springframework.cache.annotation.Cacheable("promocoes")
     override fun getAll(start: Int, size: Int): List<Promocao> {
         var pages:Pageable = PageRequest.of(start,size,Sort.by("local").ascending())
         return this.promocaoRepository.findAll(pages).toList()
