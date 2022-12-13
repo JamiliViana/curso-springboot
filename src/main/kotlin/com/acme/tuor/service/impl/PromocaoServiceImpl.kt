@@ -20,8 +20,8 @@ class PromocaoServiceImpl(val promocaoRepository: PromocaoRepository): PromocaoS
         return promocaoRepository.findById(id).orElse(null)
     }
     //    @CacheEvict("promocoes", allEntries = true)
-    override fun create(promocao: Promocao) {
-        this.promocaoRepository.save(promocao)
+    override fun create(promocao: Promocao) : Promocao{
+        return this.promocaoRepository.save(promocao)
     }
     //    @CacheEvict("promocoes", allEntries = true)
     override fun delete(id: Long) {

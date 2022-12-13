@@ -36,10 +36,9 @@ class PromocaoController {
     }
 
     @PostMapping()
-    fun create(@RequestBody promocao: Promocao): ResponseEntity<RespostaJSON> {
-        this.promocaoService.create(promocao)
-        val respostaJSON = RespostaJSON("OK", Date())
-        return ResponseEntity(respostaJSON, HttpStatus.CREATED)
+    fun create(@RequestBody promocao: Promocao): ResponseEntity<Promocao> {
+        var retornoPromocao = this.promocaoService.create(promocao)
+        return ResponseEntity(promocao, HttpStatus.CREATED)
     }
 
 

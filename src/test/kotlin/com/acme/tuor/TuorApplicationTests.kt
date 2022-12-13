@@ -8,7 +8,9 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.MediaType
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.util.*
@@ -31,29 +33,58 @@ class TuorApplicationTests {
 	fun contextLoads() {
 	}
 	@Test
+	fun deveRetornarOK_QuandoChamarGetAll(){
+
+		service?.create(Promocao(
+				null,
+				"Viagem de Natal e Ano Novo",
+				"São Paulo",
+				false,
+				6,
+				550.00))
+		service?.create(Promocao(
+			null,
+			"Viagem Carnaval",
+			"Santos",
+			false,
+			6,
+			1550.00))
+		mockMvc?.perform(get("/promocoes")
+			.accept(MediaType.APPLICATION_JSON))
+			?.andExpect(status().isOk)
+
+		val promocaoReturn = (service?.getAll(0,5));
+		Assertions.assertEquals(service?.getAll(0,5)?.size,promocaoReturn?.size);
+	}
+	@Test
 	@Throws(Exception::class)
-	fun case1() {
+	fun deveRetornarCreated_QuandoCriarPromocao() {
 		val promocao = Promocao (
-			1,
+			null,
 			"Viagem de Natal e Ano Novo",
-			"Campos de Jordão",
+			"São Paulo",
 			false,
 			6,
 			550.00)
-	mockMvc?.perform(post("/promocoes")
+	var resultado = mockMvc?.perform(post("/promocoes")
 		.contentType("application/json")
 		.content(objectMapper!!.writeValueAsString(promocao)))
-		?.andExpect(status().isCreated);
+		?.andExpect(status().isCreated)
+		?.andReturn()?.response?.contentAsString
+		var promocaoResultado = objectMapper?.readValue(resultado,Promocao::class.java)
 
-		val promocaoRetorn = service?.getById(id = promocao.id);
-		Assertions.assertEquals(promocaoRetorn?.id,1);
-		Assertions.assertEquals(promocaoRetorn?.descricao,"Viagem de Natal e Ano Novo");
-		Assertions.assertEquals(promocaoRetorn?.local,"Campos de Jordão");
-		Assertions.assertEquals(promocaoRetorn?.isAllInclusive, false);
-		Assertions.assertEquals(promocaoRetorn?.qtdDias, 6);
-		Assertions.assertEquals(promocaoRetorn?.preco, 550.00);
+
+		val promocaoReturn = service?.getById(id = promocaoResultado!!.id!!);
+		Assertions.assertNotNull(promocaoReturn?.id);
+		Assertions.assertEquals(promocao.descricao,promocaoReturn?.descricao);
+		Assertions.assertEquals(promocao.local,promocaoReturn?.local);
+		Assertions.assertEquals(promocao.isAllInclusive, promocaoReturn?.isAllInclusive);
+		Assertions.assertEquals(promocao.qtdDias, promocaoReturn?.qtdDias);
+		Assertions.assertEquals(promocao.preco, promocaoReturn?.preco);
 
 
 	}
+
+
 
 }
