@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
+import org.springframework.http.ResponseEntity
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 import java.util.*
 
@@ -84,7 +84,6 @@ class TuorApplicationTests {
 
 
 	}
-
 	@Test
 	fun deveRetornarOK_QuandoChamarGetAllMenores(){
 		service?.create(Promocao(
@@ -116,6 +115,47 @@ class TuorApplicationTests {
 		var promocaoReturn = service?.getAllByPrecoMenorQue(2000.00)
 
 		Assertions.assertEquals(service?.getAllByPrecoMenorQue(2000.00)?.size,promocaoReturn?.size)
+
+	}
+	@Test
+	fun deveRetornarOK_QuandoChamarGetById(){
+		var promocao1 =service?.create(Promocao(
+			null,
+			"Viagem 1",
+			"São Paulo",
+			false,
+			6,
+			1500.00))
+
+		var resultado = mockMvc?.perform(get("/promocoes/1")
+			.accept(MediaType.APPLICATION_JSON))
+			?.andExpect(status().isOk)
+
+		var promocaoReturn = service?.getById(1)
+		Assertions.assertNotNull(promocaoReturn?.id);
+		Assertions.assertEquals(promocao1?.descricao,promocaoReturn?.descricao);
+		Assertions.assertEquals(promocao1?.local,promocaoReturn?.local);
+		Assertions.assertEquals(promocao1?.isAllInclusive, promocaoReturn?.isAllInclusive);
+		Assertions.assertEquals(promocao1?.qtdDias, promocaoReturn?.qtdDias);
+		Assertions.assertEquals(promocao1?.preco, promocaoReturn?.preco);
+
+
+	}
+	@Test
+	fun deveRetornarACCEPT_QuandoChamarDelete(){
+		var promocao1 =service?.create(Promocao(
+			null,
+			"Viagem 1",
+			"São Paulo",
+			false,
+			6,
+			1500.00))
+		mockMvc?.perform(delete("/promocoes/${promocao1?.id}")
+			.accept(MediaType.APPLICATION_JSON))
+			?.andExpect(status().isAccepted)
+
+		var promocaoReturn = service?.getById(promocao1!!.id!!)
+		Assertions.assertNull(promocaoReturn)
 
 	}
 
