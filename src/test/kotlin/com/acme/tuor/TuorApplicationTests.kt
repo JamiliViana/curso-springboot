@@ -85,6 +85,39 @@ class TuorApplicationTests {
 
 	}
 
+	@Test
+	fun deveRetornarOK_QuandoChamarGetAllMenores(){
+		service?.create(Promocao(
+			null,
+			"Viagem 1",
+			"São Paulo",
+			false,
+			6,
+			1500.00))
+		service?.create(Promocao(
+			null,
+			"Viagem 2",
+			"Santos",
+			false,
+			6,
+			2000.00))
+		service?.create(Promocao(
+			null,
+			"Viagem 3",
+			"Santos",
+			false,
+			6,
+			1000.00))
+
+		mockMvc?.perform(get("/promocoes/menorQue/?preco=2000")
+			.accept(MediaType.APPLICATION_JSON))
+			?.andExpect(status().isOk)
+
+		var promocaoReturn = service?.getAllByPrecoMenorQue(2000.00)
+
+		Assertions.assertEquals(service?.getAllByPrecoMenorQue(2000.00)?.size,promocaoReturn?.size)
+
+	}
 
 
 }

@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional
 @Repository
 interface PromocaoRepository: PagingAndSortingRepository<Promocao,Long> {
 
-    @Query(value = "select p from Promocao p where p.preco <= :preco")
+    @Query(value = "select p from Promocao p where p.preco < :preco")
     fun findByPrecoMenorQue(@Param(value = "preco") preco:Double): List<Promocao>
 
     @Query(value = "select p from Promocao p where p.local IN :local ")
