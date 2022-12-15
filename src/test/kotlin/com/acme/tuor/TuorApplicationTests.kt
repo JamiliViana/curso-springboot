@@ -57,7 +57,7 @@ class TuorApplicationTests {
 	}
 	@Test
 	@Throws(Exception::class)
-	fun deveRetornarCreated_QuandoCriarPromocao() {
+	fun deveRetornarCreated_QuandoChamarCreate() {
 		val promocao = Promocao (
 			null,
 			"Viagem de Natal e Ano Novo",
@@ -192,6 +192,57 @@ class TuorApplicationTests {
 		Assertions.assertEquals(promocaoUpdate?.preco, promocaoReturn?.preco);
 
 
+
+	}
+
+	@Test
+	fun deveRetonarOK_QuandoChamarCount(){
+		service?.create(
+			Promocao(
+			null,
+			"Viagem1",
+			"São Paulo",
+			true,
+			3,
+			200.00
+		))
+		mockMvc?.perform(get("/promocoes/count")
+			.accept(MediaType.APPLICATION_JSON))
+			?.andExpect(status().isOk)
+
+		var totalCount = service?.count()
+		Assertions.assertEquals(service?.count(),totalCount)
+		Assertions.assertEquals(1,totalCount)
+	}
+
+	@Test
+	fun deveRetornarOK_QuandoChamarOrdenados(){
+		service?.create(
+			Promocao(
+				null,
+				"Viagem1",
+				"B",
+				true,
+				3,
+				200.00
+			))
+		service?.create(
+			Promocao(
+				null,
+				"Viagem1",
+				"A",
+				true,
+				3,
+				200.00
+			))
+			mockMvc?.perform(get("/promocoes/ordenados")
+			.accept(MediaType.APPLICATION_JSON))
+			?.andExpect(status().isOk)
+
+
+
+		var promocaoRetorn = service?.getAllSortedBylocal()
+		Assertions.assertEquals("A",promocaoRetorn?.get(0)?.local)
 
 	}
 }

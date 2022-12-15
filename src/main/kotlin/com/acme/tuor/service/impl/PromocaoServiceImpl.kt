@@ -46,7 +46,7 @@ class PromocaoServiceImpl(val promocaoRepository: PromocaoRepository): PromocaoS
         this.promocaoRepository.count()
 
     override fun getAllSortedBylocal(): List<Promocao> =
-        this.promocaoRepository.findAll(Sort.by("local").descending()).toList()
+        this.promocaoRepository.findAll(Sort.by("local").ascending()).toList()
 
     override fun getAllByPrecoMenorQue(preco:Double): List<Promocao> {
         return this.promocaoRepository.findByPrecoMenorQue(preco);
