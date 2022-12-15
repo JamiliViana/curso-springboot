@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.MediaType
-import org.springframework.http.ResponseEntity
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
@@ -159,5 +158,40 @@ class TuorApplicationTests {
 
 	}
 
+	@Test
+	fun deveRetornarACCEPT_QuandoChamarUpdate(){
+		var promocao1 =service?.create(Promocao(
+			null,
+			"Viagem 1",
+			"São Paulo",
+			false,
+			6,
+			1500.00))
 
+		val promocaoUpdate = Promocao (
+			promocao1?.id,
+			"Viagem 1 Alterada",
+			"São Caetano",
+			false,
+			6,
+			550.00)
+
+			mockMvc?.perform(put("/promocoes/${promocao1!!.id}")
+			.contentType(MediaType.APPLICATION_JSON)
+			.accept(MediaType.APPLICATION_JSON)
+			.content(objectMapper!!.writeValueAsString(promocaoUpdate)))
+			?.andExpect(status().isAccepted)
+
+
+		val promocaoReturn = service?.getById(promocaoUpdate!!.id!!)
+		Assertions.assertNotNull(promocaoReturn?.id);
+		Assertions.assertEquals(promocaoUpdate?.descricao,promocaoReturn?.descricao);
+		Assertions.assertEquals(promocaoUpdate?.local,promocaoReturn?.local);
+		Assertions.assertEquals(promocaoUpdate?.isAllInclusive, promocaoReturn?.isAllInclusive);
+		Assertions.assertEquals(promocaoUpdate?.qtdDias, promocaoReturn?.qtdDias);
+		Assertions.assertEquals(promocaoUpdate?.preco, promocaoReturn?.preco);
+
+
+
+	}
 }
