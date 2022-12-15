@@ -31,6 +31,9 @@ class TuorApplicationTests {
 	@Test
 	fun contextLoads() {
 	}
+
+
+/////////////////////////
 	@Test
 	fun deveRetornarOK_QuandoChamarGetAll(){
 
@@ -66,6 +69,8 @@ class TuorApplicationTests {
 		Assertions.assertEquals(expectativa,retorn)
 	}
 
+////////////////////////
+
 	@Test
 	@Throws(Exception::class)
 	fun deveRetornarCreated_QuandoChamarCreate() {
@@ -94,6 +99,10 @@ class TuorApplicationTests {
 
 
 	}
+
+
+////////////////////
+
 	@Test
 	fun deveRetornarOK_QuandoChamarGetAllMenores(){
 		service?.create(Promocao(
@@ -127,30 +136,57 @@ class TuorApplicationTests {
 		Assertions.assertEquals(service?.getAllByPrecoMenorQue(2000.00)?.size,promocaoReturn?.size)
 
 	}
+
+	@Test
+	fun deveRetornarNotFound_QuandoChamarGetAllMenores(){
+		mockMvc?.perform(get("/promocoes/menorQue/?preco=2000"))
+			?.andExpect(status().isNotFound)
+
+		var retorn = service?.getAllByPrecoMenorQue(2000.00)
+		Assertions.assertEquals(service?.getAllByPrecoMenorQue(2000.00)?.size,retorn?.size)
+	}
+
+/////////////////////////////////////
 	@Test
 	fun deveRetornarOK_QuandoChamarGetById(){
-		var promocao1 =service?.create(Promocao(
+		var promocaoGetId =service?.create(Promocao(
 			null,
-			"Viagem 1",
+			"Viagem Get Id",
 			"São Paulo",
 			false,
 			6,
 			1500.00))
 
-		var resultado = mockMvc?.perform(get("/promocoes/1")
+		 mockMvc?.perform(get("/promocoes/1")
 			.accept(MediaType.APPLICATION_JSON))
 			?.andExpect(status().isOk)
 
 		var promocaoReturn = service?.getById(1)
 		Assertions.assertNotNull(promocaoReturn?.id);
-		Assertions.assertEquals(promocao1?.descricao,promocaoReturn?.descricao);
-		Assertions.assertEquals(promocao1?.local,promocaoReturn?.local);
-		Assertions.assertEquals(promocao1?.isAllInclusive, promocaoReturn?.isAllInclusive);
-		Assertions.assertEquals(promocao1?.qtdDias, promocaoReturn?.qtdDias);
-		Assertions.assertEquals(promocao1?.preco, promocaoReturn?.preco);
+		Assertions.assertEquals(promocaoGetId?.descricao,promocaoReturn?.descricao);
+		Assertions.assertEquals(promocaoGetId?.local,promocaoReturn?.local);
+		Assertions.assertEquals(promocaoGetId?.isAllInclusive, promocaoReturn?.isAllInclusive);
+		Assertions.assertEquals(promocaoGetId?.qtdDias, promocaoReturn?.qtdDias);
+		Assertions.assertEquals(promocaoGetId?.preco, promocaoReturn?.preco);
 
 
 	}
+
+	@Test
+	fun deveRetornarNotFound_QuandoChamarGetById(){
+		mockMvc?.perform(get("/promocoes/1"))
+			?.andExpect(status().isNotFound)
+
+		var retorn = service?.getById(1)
+		Assertions.assertNull(retorn?.id)
+		Assertions.assertNull(retorn?.descricao)
+		Assertions.assertNull(retorn?.local)
+		Assertions.assertNull(retorn?.isAllInclusive)
+		Assertions.assertNull(retorn?.qtdDias)
+		Assertions.assertNull(retorn?.preco)
+	}
+//////////////////////////
+
 	@Test
 	fun deveRetornarACCEPT_QuandoChamarDelete(){
 		var promocao1 =service?.create(Promocao(
@@ -168,6 +204,18 @@ class TuorApplicationTests {
 		Assertions.assertNull(promocaoReturn)
 
 	}
+
+
+	@Test
+	fun deveRetornarNotFound_QuandoChamarDelete(){
+		mockMvc?.perform(delete("/promocoes/1"))
+			?.andExpect(status().isNotFound)
+
+		Assertions.assertNull(service?.getById(1))
+	}
+
+
+//////////////////////////
 
 	@Test
 	fun deveRetornarACCEPT_QuandoChamarUpdate(){
@@ -206,6 +254,30 @@ class TuorApplicationTests {
 
 	}
 
+
+	@Test
+	fun deveRetornarNotFound_QuandoChamarUpdate(){
+
+		val update = Promocao (
+			1,
+			"Viagem 1 Alterada",
+			"São Caetano",
+			false,
+			6,
+			550.00)
+
+		mockMvc?.perform(put("/promocoes/1")
+			.contentType(MediaType.APPLICATION_JSON)
+			.accept(MediaType.APPLICATION_JSON)
+			.content(objectMapper!!.writeValueAsString(update)))
+			?.andExpect(status().isNotFound)
+
+		Assertions.assertNull(service?.getById(1))
+	}
+
+
+////////////////////////
+
 	@Test
 	fun deveRetonarOK_QuandoChamarCount(){
 		service?.create(
@@ -225,6 +297,8 @@ class TuorApplicationTests {
 		Assertions.assertEquals(service?.count(),totalCount)
 		Assertions.assertEquals(1,totalCount)
 	}
+
+////////////////////
 
 	@Test
 	fun deveRetornarOK_QuandoChamarOrdenados(){
@@ -256,4 +330,15 @@ class TuorApplicationTests {
 		Assertions.assertEquals("A",promocaoRetorn?.get(0)?.local)
 
 	}
+
+	@Test
+	fun deveRetornarNotFound_QuandoChamarOrdenados(){
+		mockMvc?.perform(get("/promocoes/ordenados"))
+			?.andExpect(status().isNotFound)
+
+		var teste = listOf<Promocao>()
+		Assertions.assertEquals(teste,service?.getAll(0,3))
+	}
+
+//////////////////////////
 }
