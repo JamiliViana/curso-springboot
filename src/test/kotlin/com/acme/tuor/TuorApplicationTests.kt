@@ -55,6 +55,17 @@ class TuorApplicationTests {
 		val promocaoReturn = (service?.getAll(0,5));
 		Assertions.assertEquals(service?.getAll(0,5)?.size,promocaoReturn?.size);
 	}
+
+	@Test
+	fun deveRetornarNotFound_QuandoChamarGetAll(){
+		mockMvc?.perform(get("/promocoes"))
+			?.andExpect(status().isNotFound)
+
+		var retorn = service?.getAll(0,3);
+		var expectativa = listOf<Promocao>()
+		Assertions.assertEquals(expectativa,retorn)
+	}
+
 	@Test
 	@Throws(Exception::class)
 	fun deveRetornarCreated_QuandoChamarCreate() {
