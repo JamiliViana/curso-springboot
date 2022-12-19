@@ -1,5 +1,7 @@
 package com.acme.tuor.exception
 
-class PromocaoNotFoundException(message:String):Exception(message) {
+import org.springframework.http.HttpStatus
+
+class PromocaoNotFoundException(message: String,status: HttpStatus):Exception(message) {
 
 }

@@ -2,13 +2,13 @@ package com.acme.tuor.controller
 
 import com.acme.tuor.model.ErrorMessage
 import com.acme.tuor.model.Promocao;
-import com.acme.tuor.model.RespostaJSON
 import com.acme.tuor.service.PromocaoService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import java.util.*
+import javax.validation.Valid
 
 @RestController
 @RequestMapping (value = ["/promocoes"])
@@ -36,9 +36,10 @@ class PromocaoController {
     }
 
     @PostMapping()
-    fun create(@RequestBody promocao: Promocao): ResponseEntity<Promocao> {
-        var retornoPromocao = this.promocaoService.create(promocao)
-        return ResponseEntity(promocao, HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.CREATED)
+    fun create(@RequestBody @Valid promocao: Promocao): Promocao {
+            this.promocaoService.create(promocao)
+            return promocao
     }
 
 

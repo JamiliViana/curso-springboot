@@ -99,6 +99,22 @@ class TuorApplicationTests {
 
 
 	}
+	@Test
+	fun deveRetornarBadRequest_QuandoChamarCreate(){
+		val promocao = Promocao (
+			null,
+			descricao = null,
+			local = "São Paulo",
+			false,
+			6,
+			550.00)
+
+		mockMvc?.perform(post("/promocoes")
+			.contentType("application/json")
+			.content(objectMapper!!.writeValueAsString(promocao)))
+			?.andExpect(status().isBadRequest)
+
+	}
 
 
 ////////////////////

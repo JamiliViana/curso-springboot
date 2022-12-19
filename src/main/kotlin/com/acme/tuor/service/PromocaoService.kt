@@ -1,6 +1,7 @@
 package com.acme.tuor.service
 
 import com.acme.tuor.model.Promocao
+import javax.xml.validation.Validator
 
 interface PromocaoService {
     fun getById(id:Long): Promocao?
