@@ -56,8 +56,8 @@ class TuorApplicationTests {
 			.accept(MediaType.APPLICATION_JSON))
 			?.andExpect(status().isOk)
 
-		val promocaoReturn = (service?.getAll(0,5));
-		Assertions.assertEquals(service?.getAll(0,5)?.size,promocaoReturn?.size);
+		val promocaoReturn = (service?.getAll(0,5))
+	Assertions.assertEquals(service?.getAll(0,5)?.size,promocaoReturn?.size)
 	}
 
 	@Test
@@ -79,21 +79,21 @@ class TuorApplicationTests {
 			false,
 			6,
 			550.00)
-	var resultado = mockMvc?.perform(post("/promocoes")
+		val resultado = mockMvc?.perform(post("/promocoes")
 		.contentType("application/json")
 		.content(objectMapper!!.writeValueAsString(promocao)))
 		?.andExpect(status().isCreated)
 		?.andReturn()?.response?.contentAsString
-		var promocaoResultado = objectMapper?.readValue(resultado,Promocao::class.java)
+		val promocaoResultado = objectMapper?.readValue(resultado,Promocao::class.java)
 
 
-		val promocaoReturn = service?.getById(id = promocaoResultado!!.id!!);
-		Assertions.assertNotNull(promocaoReturn?.id);
-		Assertions.assertEquals(promocao.descricao,promocaoReturn?.descricao);
-		Assertions.assertEquals(promocao.local,promocaoReturn?.local);
-		Assertions.assertEquals(promocao.isAllInclusive, promocaoReturn?.isAllInclusive);
-		Assertions.assertEquals(promocao.qtdDias, promocaoReturn?.qtdDias);
-		Assertions.assertEquals(promocao.preco, promocaoReturn?.preco);
+		val promocaoReturn = service?.getById(id = promocaoResultado!!.id!!)
+	Assertions.assertNotNull(promocaoReturn?.id)
+		Assertions.assertEquals(promocao.descricao,promocaoReturn?.descricao)
+		Assertions.assertEquals(promocao.local,promocaoReturn?.local)
+		Assertions.assertEquals(promocao.isAllInclusive, promocaoReturn?.isAllInclusive)
+		Assertions.assertEquals(promocao.qtdDias, promocaoReturn?.qtdDias)
+		Assertions.assertEquals(promocao.preco, promocaoReturn?.preco)
 
 
 	}
@@ -102,7 +102,7 @@ class TuorApplicationTests {
 	@Test
 	fun deveRetornarACCEPT_QuandoChamarDelete(){
 	service?.deleteAll()
-		var promocao1 =service?.create(Promocao(
+		val promocao1 =service?.create(Promocao(
 			null,
 			"Viagem 1",
 			"São Paulo",
@@ -153,7 +153,7 @@ class TuorApplicationTests {
 			.accept(MediaType.APPLICATION_JSON))
 			?.andExpect(status().isOk)
 
-		var promocaoReturn = service?.getAllByPrecoMenorQue(2000.00)
+		val promocaoReturn = service?.getAllByPrecoMenorQue(2000.00)
 
 		Assertions.assertEquals(service?.getAllByPrecoMenorQue(2000.00)?.size,promocaoReturn?.size)
 
@@ -170,7 +170,7 @@ class TuorApplicationTests {
 	@Test
 	fun deveRetornarOK_QuandoChamarGetById(){
 	service?.deleteAll()
-		var promocaoGetId =service?.create(Promocao(
+		val promocaoGetId =service?.create(Promocao(
 			1,
 			"Viagem Get Id",
 			"São Paulo",
@@ -182,13 +182,13 @@ class TuorApplicationTests {
 			.accept(MediaType.APPLICATION_JSON))
 			?.andExpect(status().isOk)
 
-		var promocaoReturn = service?.getById(1)
-		Assertions.assertNotNull(promocaoReturn?.id);
-		Assertions.assertEquals(promocaoGetId?.descricao,promocaoReturn?.descricao);
-		Assertions.assertEquals(promocaoGetId?.local,promocaoReturn?.local);
-		Assertions.assertEquals(promocaoGetId?.isAllInclusive, promocaoReturn?.isAllInclusive);
-		Assertions.assertEquals(promocaoGetId?.qtdDias, promocaoReturn?.qtdDias);
-		Assertions.assertEquals(promocaoGetId?.preco, promocaoReturn?.preco);
+		val promocaoReturn = service?.getById(1)
+		Assertions.assertNotNull(promocaoReturn?.id)
+		Assertions.assertEquals(promocaoGetId?.descricao,promocaoReturn?.descricao)
+		Assertions.assertEquals(promocaoGetId?.local,promocaoReturn?.local)
+		Assertions.assertEquals(promocaoGetId?.isAllInclusive, promocaoReturn?.isAllInclusive)
+		Assertions.assertEquals(promocaoGetId?.qtdDias, promocaoReturn?.qtdDias)
+		Assertions.assertEquals(promocaoGetId?.preco, promocaoReturn?.preco)
 
 
 	}
@@ -204,7 +204,7 @@ class TuorApplicationTests {
 	@Test
 	fun deveRetornarACCEPT_QuandoChamarUpdate(){
 		service?.deleteAll()
-		var promocao1 =service?.create(Promocao(
+		val promocao1 =service?.create(Promocao(
 			null,
 			"Viagem 1",
 			"São Paulo",
@@ -227,13 +227,13 @@ class TuorApplicationTests {
 			?.andExpect(status().isAccepted)
 
 
-		val promocaoReturn = service?.getById(promocaoUpdate!!.id!!)
-		Assertions.assertNotNull(promocaoReturn?.id);
-		Assertions.assertEquals(promocaoUpdate?.descricao,promocaoReturn?.descricao);
-		Assertions.assertEquals(promocaoUpdate?.local,promocaoReturn?.local);
-		Assertions.assertEquals(promocaoUpdate?.isAllInclusive, promocaoReturn?.isAllInclusive);
-		Assertions.assertEquals(promocaoUpdate?.qtdDias, promocaoReturn?.qtdDias);
-		Assertions.assertEquals(promocaoUpdate?.preco, promocaoReturn?.preco);
+		val promocaoReturn = service?.getById(promocaoUpdate.id!!)
+		Assertions.assertNotNull(promocaoReturn?.id)
+		Assertions.assertEquals(promocaoUpdate.descricao,promocaoReturn?.descricao)
+		Assertions.assertEquals(promocaoUpdate.local,promocaoReturn?.local)
+		Assertions.assertEquals(promocaoUpdate.isAllInclusive, promocaoReturn?.isAllInclusive)
+		Assertions.assertEquals(promocaoUpdate.qtdDias, promocaoReturn?.qtdDias)
+		Assertions.assertEquals(promocaoUpdate.preco, promocaoReturn?.preco)
 
 
 
@@ -277,7 +277,7 @@ class TuorApplicationTests {
 			.accept(MediaType.APPLICATION_JSON))
 			?.andExpect(status().isOk)
 
-		var totalCount = service?.count()
+		val totalCount = service?.count()
 		Assertions.assertEquals(service?.count(),totalCount)
 		Assertions.assertEquals(1,totalCount)
 	}
@@ -311,7 +311,7 @@ class TuorApplicationTests {
 
 
 
-		var promocaoRetorn = service?.getAllSortedBylocal()
+		val promocaoRetorn = service?.getAllSortedBylocal()
 		Assertions.assertEquals("A",promocaoRetorn?.get(0)?.local)
 
 	}
