@@ -12,5 +12,6 @@ interface PromocaoService {
     fun count(): Long
     fun getAllSortedBylocal():List<Promocao>
     fun getAllByPrecoMenorQue(preco:Double):List<Promocao>
+    fun deleteAll()
 
 }

@@ -36,6 +36,7 @@ class TuorApplicationTests {
 /////////////////////////
 	@Test
 	fun deveRetornarOK_QuandoChamarGetAll(){
+	service?.deleteAll()
 
 		service?.create(Promocao(
 				null,
@@ -61,19 +62,16 @@ class TuorApplicationTests {
 
 	@Test
 	fun deveRetornarNotFound_QuandoChamarGetAll(){
+		service?.deleteAll()
 		mockMvc?.perform(get("/promocoes"))
 			?.andExpect(status().isNotFound)
-
-		var retorn = service?.getAll(0,3);
-		var expectativa = listOf<Promocao>()
-		Assertions.assertEquals(expectativa,retorn)
 	}
 
 ////////////////////////
-
 	@Test
 	@Throws(Exception::class)
 	fun deveRetornarCreated_QuandoChamarCreate() {
+	service?.deleteAll()
 		val promocao = Promocao (
 			null,
 			"Viagem de Natal e Ano Novo",
@@ -99,28 +97,36 @@ class TuorApplicationTests {
 
 
 	}
+
+////////////////////
 	@Test
-	fun deveRetornarBadRequest_QuandoChamarCreate(){
-		val promocao = Promocao (
+	fun deveRetornarACCEPT_QuandoChamarDelete(){
+	service?.deleteAll()
+		var promocao1 =service?.create(Promocao(
 			null,
-			descricao = null,
-			local = "São Paulo",
+			"Viagem 1",
+			"São Paulo",
 			false,
 			6,
-			550.00)
-
-		mockMvc?.perform(post("/promocoes")
-			.contentType("application/json")
-			.content(objectMapper!!.writeValueAsString(promocao)))
-			?.andExpect(status().isBadRequest)
+			1500.00))
+		mockMvc?.perform(delete("/promocoes/${promocao1?.id}")
+			.accept(MediaType.APPLICATION_JSON))
+			?.andExpect(status().isAccepted)
 
 	}
 
+	@Test
+	fun deveRetornarNotFound_QuandoChamarDelete(){
+		service?.deleteAll()
+		mockMvc?.perform(delete("/promocoes/1"))
+			?.andExpect(status().isNotFound)
+	}
 
-////////////////////
+//////////////////////////
 
 	@Test
 	fun deveRetornarOK_QuandoChamarGetAllMenores(){
+		service?.deleteAll()
 		service?.create(Promocao(
 			null,
 			"Viagem 1",
@@ -155,18 +161,17 @@ class TuorApplicationTests {
 
 	@Test
 	fun deveRetornarNotFound_QuandoChamarGetAllMenores(){
+		service?.deleteAll()
 		mockMvc?.perform(get("/promocoes/menorQue/?preco=2000"))
 			?.andExpect(status().isNotFound)
-
-		var retorn = service?.getAllByPrecoMenorQue(2000.00)
-		Assertions.assertEquals(service?.getAllByPrecoMenorQue(2000.00)?.size,retorn?.size)
 	}
 
 /////////////////////////////////////
 	@Test
 	fun deveRetornarOK_QuandoChamarGetById(){
+	service?.deleteAll()
 		var promocaoGetId =service?.create(Promocao(
-			null,
+			1,
 			"Viagem Get Id",
 			"São Paulo",
 			false,
@@ -189,52 +194,16 @@ class TuorApplicationTests {
 	}
 
 	@Test
-	fun deveRetornarNotFound_QuandoChamarGetById(){
+	fun deveRetornarNotFound_QuandoChamarGetById() {
+		service?.deleteAll()
 		mockMvc?.perform(get("/promocoes/1"))
 			?.andExpect(status().isNotFound)
-
-		var retorn = service?.getById(1)
-		Assertions.assertNull(retorn?.id)
-		Assertions.assertNull(retorn?.descricao)
-		Assertions.assertNull(retorn?.local)
-		Assertions.assertNull(retorn?.isAllInclusive)
-		Assertions.assertNull(retorn?.qtdDias)
-		Assertions.assertNull(retorn?.preco)
 	}
-//////////////////////////
-
-	@Test
-	fun deveRetornarACCEPT_QuandoChamarDelete(){
-		var promocao1 =service?.create(Promocao(
-			null,
-			"Viagem 1",
-			"São Paulo",
-			false,
-			6,
-			1500.00))
-		mockMvc?.perform(delete("/promocoes/${promocao1?.id}")
-			.accept(MediaType.APPLICATION_JSON))
-			?.andExpect(status().isAccepted)
-
-		var promocaoReturn = service?.getById(promocao1!!.id!!)
-		Assertions.assertNull(promocaoReturn)
-
-	}
-
-
-	@Test
-	fun deveRetornarNotFound_QuandoChamarDelete(){
-		mockMvc?.perform(delete("/promocoes/1"))
-			?.andExpect(status().isNotFound)
-
-		Assertions.assertNull(service?.getById(1))
-	}
-
-
 //////////////////////////
 
 	@Test
 	fun deveRetornarACCEPT_QuandoChamarUpdate(){
+		service?.deleteAll()
 		var promocao1 =service?.create(Promocao(
 			null,
 			"Viagem 1",
@@ -273,7 +242,7 @@ class TuorApplicationTests {
 
 	@Test
 	fun deveRetornarNotFound_QuandoChamarUpdate(){
-
+		service?.deleteAll()
 		val update = Promocao (
 			1,
 			"Viagem 1 Alterada",
@@ -287,8 +256,6 @@ class TuorApplicationTests {
 			.accept(MediaType.APPLICATION_JSON)
 			.content(objectMapper!!.writeValueAsString(update)))
 			?.andExpect(status().isNotFound)
-
-		Assertions.assertNull(service?.getById(1))
 	}
 
 
@@ -296,6 +263,7 @@ class TuorApplicationTests {
 
 	@Test
 	fun deveRetonarOK_QuandoChamarCount(){
+		service?.deleteAll()
 		service?.create(
 			Promocao(
 			null,
@@ -318,6 +286,7 @@ class TuorApplicationTests {
 
 	@Test
 	fun deveRetornarOK_QuandoChamarOrdenados(){
+		service?.deleteAll()
 		service?.create(
 			Promocao(
 				null,
@@ -349,11 +318,9 @@ class TuorApplicationTests {
 
 	@Test
 	fun deveRetornarNotFound_QuandoChamarOrdenados(){
+		service?.deleteAll()
 		mockMvc?.perform(get("/promocoes/ordenados"))
 			?.andExpect(status().isNotFound)
-
-		var teste = listOf<Promocao>()
-		Assertions.assertEquals(teste,service?.getAll(0,3))
 	}
 
 //////////////////////////

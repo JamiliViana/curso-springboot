@@ -69,4 +69,8 @@ class PromocaoServiceImpl(val promocaoRepository: PromocaoRepository): PromocaoS
         }else return list
     }
 
+    override fun deleteAll() {
+        promocaoRepository.deleteAll()
+    }
+
 }

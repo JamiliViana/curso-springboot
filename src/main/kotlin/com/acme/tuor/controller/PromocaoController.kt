@@ -30,11 +30,11 @@ class PromocaoController {
 
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.ACCEPTED)
     fun delete(@PathVariable id: Long) = this.promocaoService.delete(id)
 
     @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.ACCEPTED)
     fun update(@PathVariable id: Long, @RequestBody @Valid promocao: Promocao) = this.promocaoService.update(id, promocao)
 
     @GetMapping()
