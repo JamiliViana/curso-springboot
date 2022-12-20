@@ -1,13 +1,12 @@
 package com.acme.tuor.service
 
 import com.acme.tuor.model.Promocao
-import javax.xml.validation.Validator
 
 interface PromocaoService {
     fun getById(id:Long): Promocao?
     fun create(promocao: Promocao): Promocao
     fun delete(id:Long)
-    fun update(id:Long, promocao:Promocao)
+    fun update(id:Long, promocao:Promocao): Promocao?
     fun searchByLocal(local:String): List<Promocao>
     fun getAll(start: Int, size: Int):List<Promocao>
     fun count(): Long

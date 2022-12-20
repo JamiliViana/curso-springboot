@@ -1,5 +1,6 @@
 package com.acme.tuor.advice
 
+
 import com.acme.tuor.exception.PromocaoNotFoundException
 import com.acme.tuor.model.ErrorMessage
 import org.springframework.http.HttpHeaders
@@ -24,9 +25,8 @@ class ErrorHandler (): ResponseEntityExceptionHandler() {
         return handleExceptionInternal(ex, message, headers, HttpStatus.BAD_REQUEST, request)
     }
     @ExceptionHandler(PromocaoNotFoundException::class)
-    fun PromocaoNotFoundExceptionHandler(servletRequest: HttpServletRequest, servletResponse: HttpServletResponse,
-                                         exception: java.lang.Exception): ResponseEntity<ErrorMessage>{
-        return ResponseEntity(ErrorMessage("Promocao nao localizada",exception.message !!),
+    fun PromocaoNotFoundExceptionHandler(exception:Exception): ResponseEntity<ErrorMessage>{
+        return ResponseEntity(ErrorMessage("Promoção não localizada"),
         HttpStatus.NOT_FOUND)
     }
 

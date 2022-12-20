@@ -1,6 +1,5 @@
 package com.acme.tuor.controller
 
-import com.acme.tuor.model.ErrorMessage
 import com.acme.tuor.model.Promocao;
 import com.acme.tuor.service.PromocaoService
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,89 +16,43 @@ class PromocaoController {
     lateinit var promocaoService: PromocaoService
 
     @GetMapping("/menorQue/")
-    fun getAllMenores(@RequestParam(required = true) preco: Double): Any {
-        val list = this.promocaoService.getAllByPrecoMenorQue(preco);
-        if (list.size == 0) {
-            return ResponseEntity(
-                ErrorMessage("Promoções não localizadas","Promocões com o valor menor que ${preco}, não foram localizadas"), HttpStatus.NOT_FOUND)
-        } else
-            return ResponseEntity(list, HttpStatus.OK)
-    }
+    @ResponseStatus(HttpStatus.OK)
+    fun getAllMenores(@RequestParam(required = true) preco: Double) = this.promocaoService.getAllByPrecoMenorQue(preco)
+
 
     @GetMapping("/{id}")
-    fun getId(@PathVariable id: Long): ResponseEntity<Any> {
-        var promocao = this.promocaoService.getById(id)
-        return if (promocao != null)
-            return ResponseEntity(promocao, HttpStatus.OK)
-        else
-            return ResponseEntity(ErrorMessage("Promoção não localizada", "Promocao ${id} não localizada"), HttpStatus.NOT_FOUND)
-    }
+    @ResponseStatus(HttpStatus.OK)
+    fun getId(@PathVariable id: Long) = this.promocaoService.getById(id)
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    fun create(@RequestBody @Valid promocao: Promocao): Promocao {
-            this.promocaoService.create(promocao)
-            return promocao
-    }
+    fun create(@RequestBody @Valid promocao: Promocao) = this.promocaoService.create(promocao)
 
 
     @DeleteMapping("/{id}")
-    fun delete(@PathVariable id: Long): ResponseEntity<Any> {
-        var status = HttpStatus.NOT_FOUND
-        if (this.promocaoService.getById(id) != null) {
-            status = HttpStatus.ACCEPTED
-            this.promocaoService.delete(id)
-            return ResponseEntity(Unit, status)
-        } else {
-            return ResponseEntity(ErrorMessage("Promocao inexistente", "A promoção ${id} não existe"), status)
-        }
-
-    }
+    @ResponseStatus(HttpStatus.OK)
+    fun delete(@PathVariable id: Long) = this.promocaoService.delete(id)
 
     @PutMapping("/{id}")
-    fun update(@PathVariable id: Long, @RequestBody promocao: Promocao): ResponseEntity<Any> {
-        var status = HttpStatus.NOT_FOUND
-        if (this.promocaoService.getById(id) != null) {
-            this.promocaoService.update(id, promocao)
-            status = HttpStatus.ACCEPTED
-        }
-        return ResponseEntity(ErrorMessage("Promocao inexistente","Promoção ${id} não pode ser alterada, pois não foi possivel encontra-la"),status)
-    }
+    @ResponseStatus(HttpStatus.OK)
+    fun update(@PathVariable id: Long, @RequestBody @Valid promocao: Promocao) = this.promocaoService.update(id, promocao)
 
     @GetMapping()
+    @ResponseStatus(HttpStatus.OK)
     fun getAll(
         @RequestParam(required = false, defaultValue = "0") start: Int,
-        @RequestParam(required = false, defaultValue = "3") size: Int, ): ResponseEntity<Any> {
-        val list = this.promocaoService.getAll(start, size)
-        if (list.size == 0) {
-            return ResponseEntity(ErrorMessage("Promoções não localizadas", "Não possui promoções cadastradas"),
-                HttpStatus.NOT_FOUND)
-        } else {
-            return ResponseEntity(list, HttpStatus.OK)
-        }
-    }
+        @RequestParam(required = false, defaultValue = "3") size: Int, ): List<Promocao> = this.promocaoService.getAll(start, size)
+
     @GetMapping("/count")
+    @ResponseStatus(HttpStatus.OK)
     fun count(): ResponseEntity<Map<String, Long>> = ResponseEntity.ok().body(mapOf("count" to this.promocaoService.count()))
 
     @GetMapping("/ordenados")
-    fun ordenados(): ResponseEntity<Any> {
-        val list = this.promocaoService.getAllSortedBylocal()
-        if (list.size == 0) {
-            return ResponseEntity(ErrorMessage("Promoções não localizadas", "Não possui promoções cadastradas"),
-                HttpStatus.NOT_FOUND)
-        } else {
-            return ResponseEntity(list, HttpStatus.OK)
-        }
-    }
+    @ResponseStatus(HttpStatus.OK)
+    fun ordenados(): List<Promocao> = this.promocaoService.getAllSortedBylocal()
+
 
     @GetMapping("/byLocal/")
-    fun getByLocal(@RequestParam(required = true) local: String): Any {
-        val list = this.promocaoService.searchByLocal(local);
-        if (list.size == 0) {
-            return ResponseEntity(
-                ErrorMessage("Promoções não localizadas", "Promocões com o nome ${local}, não foram localizadas"), HttpStatus.NOT_FOUND)
-        } else {
-            return ResponseEntity(list, HttpStatus.OK)
-        }
-    }
+    fun getByLocal(@RequestParam(required = true) local: String) = this.promocaoService.searchByLocal(local);
+
 }
